@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="slade.carter.spyclient.FileManagerActivity"
+    android:weightSum="1">
+
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/pasteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Вставить" />
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Обновить" />
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Назад" />
+
+    </TableRow>
+
+    <TextView
+        android:id="@+id/filesTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Файлы жертвы "
+        android:textAlignment="center" />
+
+
+    <TextView
+        android:id="@+id/pathTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="/" />
+
+    <ListView
+        android:id="@+id/filesListView"
+        android:layout_width="match_parent"
+        android:layout_height="374dp" />
+
+</LinearLayout>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="com.google.spyclient.FileManagerActivity"
+    android:weightSum="1">
+
+    <TableRow
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/ipTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IP: "
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="32dp" />
+
+        <EditText
+            android:id="@+id/ipEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="ip"
+            tools:layout_editor_absoluteX="119dp"
+            tools:layout_editor_absoluteY="16dp" />
+    </TableRow>
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/serverPortTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SERVER_PORT: " />
+
+        <EditText
+            android:id="@+id/serverPortEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="serverPort" />
+    </TableRow>
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/downloadPortTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DOWNLOAD_PORT: " />
+
+        <EditText
+            android:id="@+id/downloadEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="downloadPort" />
+    </TableRow>
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/downloadPathTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DOWNLOAD_PATH: " />
+
+        <EditText
+            android:id="@+id/downloadPathEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="downloadPath" />
+    </TableRow>
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Обновить" />
+
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сбросить" />
+    </TableRow>
+</LinearLayout>

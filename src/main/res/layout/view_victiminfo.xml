@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Имя:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt" />
+
+    <TextView
+        android:id="@+id/phoneNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Телефон:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt"/>
+
+    <TextView
+        android:id="@+id/ownerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Владелец:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt"/>
+
+    <TextView
+        android:id="@+id/ipTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SERVER_IP:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt"/>
+
+    <TextView
+        android:id="@+id/serverPortTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SERVER_PORT:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt"/>
+
+    <TextView
+        android:id="@+id/downloadPortTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DOWNLOAD_PORT:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt"/>
+
+</LinearLayout>
