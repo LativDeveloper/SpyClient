@@ -8,10 +8,10 @@
     android:padding="10dp" >
 
     <TextView
-        android:id="@+id/nameTextView"
+        android:id="@+id/victimTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Имя:"
+        android:text="Жертва:"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="6pt" />
 
@@ -24,10 +24,10 @@
         android:textSize="6pt"/>
 
     <TextView
-        android:id="@+id/ownerTextView"
+        android:id="@+id/modelTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Владелец:"
+        android:text="Модель:"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="6pt"/>
 
@@ -48,10 +48,10 @@
         android:textSize="6pt"/>
 
     <TextView
-        android:id="@+id/downloadPortTextView"
+        android:id="@+id/lastOnlineTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DOWNLOAD_PORT:"
+        android:text="Online:"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="6pt"/>
 

