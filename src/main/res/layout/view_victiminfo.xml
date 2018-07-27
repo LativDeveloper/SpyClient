@@ -71,5 +71,13 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="6pt"/>
 
+    <TextView
+        android:id="@+id/recordAudioTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Запись аудио:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt"/>
+
 
 </LinearLayout>

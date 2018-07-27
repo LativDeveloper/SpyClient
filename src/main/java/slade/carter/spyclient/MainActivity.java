@@ -341,26 +341,30 @@ public class MainActivity extends AppCompatActivity {
                             showText("Ошибка!");
                             return;
                     }
-                    break;
-                case "record":
-                    switch (message.getString("code")) {
-                        case PROCESS:
-                            showText("Начинаем запись...");
-                            return;
-                        case FINISH_RECORD:
-                            showText("Запись завершена!");
-                            break;
+                    break;*/
+                case "start.audio.record":
+                    String code = (String) message.get("code");
+                    switch (code) {
                         case SUCCESS:
                             showText("Запись начата!");
-                            VictimsActivity.getInstance().isClicked = true;
                             return;
                         case ERROR:
-                            showText("Ошибка!");
-                            VictimsActivity.getInstance().isClicked = true;
+                            showText("Ошибка старта записи!");
                             return;
                     }
                     break;
-                case "getLastOnline":
+                case "stop.audio.record":
+                    code = (String) message.get("code");
+                    switch (code) {
+                        case SUCCESS:
+                            showText("Запись остановлена!");
+                            return;
+                        case ERROR:
+                            showText("Ошибка остановки записи!");
+                            return;
+                    }
+                    break;
+                /*case "getLastOnline":
                     if (message.has("code")) {
                         switch (message.getString("code")) {
                             case PROCESS:

