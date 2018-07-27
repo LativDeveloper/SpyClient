@@ -24,7 +24,7 @@
         <activity android:name=".MenuActivity" />
         <activity android:name=".VictimsActivity" />
         <activity android:name=".SettingsActivity" />
-
+        <activity android:name=".WifiManagerActivity"></activity>
     </application>
 
 </manifest>

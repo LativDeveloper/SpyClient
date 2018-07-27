@@ -48,11 +48,28 @@
         android:textSize="6pt"/>
 
     <TextView
-        android:id="@+id/lastOnlineTextView"
+        android:id="@+id/netTypeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Online:"
+        android:text="Тип инета:"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="6pt"/>
+
+    <TextView
+        android:id="@+id/netNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Имя инета:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt"/>
+
+    <TextView
+        android:id="@+id/netSubtypeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Тип сети:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt"/>
+
 
 </LinearLayout>

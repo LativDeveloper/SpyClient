@@ -8,11 +8,20 @@
     android:padding="10dp" >
 
     <TextView
+        android:id="@+id/victimTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Жертва:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="6pt" />
+
+    <TextView
         android:id="@+id/lastOnlineTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LAST_ONLINE:"
+        android:text="Онлайн:"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="6pt" />
+        android:textSize="6pt"/>
+
 
 </LinearLayout>

