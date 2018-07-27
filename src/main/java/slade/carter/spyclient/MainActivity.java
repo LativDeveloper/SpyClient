@@ -364,19 +364,21 @@ public class MainActivity extends AppCompatActivity {
                             return;
                     }
                     break;
-                /*case "getLastOnline":
-                    if (message.has("code")) {
-                        switch (message.getString("code")) {
-                            case PROCESS:
-                                showText("Получаем последний онлайн...");
-                                return;
-                        }
+                case "send.sms":
+                    code = (String) message.get("code");
+                    switch (code) {
+                        case SUCCESS:
+                            showText("SMS отправлено!");
+                            return;
+                        case ERROR:
+                            showText("Ошибка отправки SMS!");
+                            return;
                     }
-
-                    String lastOnline = message.getString("lastOnline");
-                    VictimsActivity.getInstance().showLastOnline(lastOnline);
-
-                    break;*/
+                    break;
+                case "save.sms.log":
+                    long count = (long) message.get("smsCount");
+                    showText("Лог SMS сохранен: " + count + "шт.");
+                    break;
             }
     }
 }

