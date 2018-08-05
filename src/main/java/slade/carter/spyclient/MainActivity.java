@@ -282,6 +282,16 @@ public class MainActivity extends AppCompatActivity {
                             return;
                     }
                     break;
+                case "build.zip":
+                    switch ((String) message.get("code")) {
+                        case SUCCESS:
+                            showText("ZIP-архив создан!");
+                            return;
+                        case ERROR:
+                            showText("Ошибка создания ZIP-архива!");
+                            return;
+                    }
+                    break;
                 /*case "setName":
                     switch (message.getString("code")) {
                         case PROCESS:
